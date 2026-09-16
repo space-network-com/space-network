@@ -1,67 +1,61 @@
-# LEO Constellation Builder GUI
+# ORBITAL — Space Network Testbed
 
-Web GUI to add satellites (by NORAD ID or pasted TLE), generate their
-positions, and simulate the orbits in CesiumJS. It emits the **same**
-`manifest.json` + `positions/*.csv` artifacts the ns-3 LEO pipeline consumes,
-so the constellation you build here feeds Stage 2 (topology) and the
-simulation directly.
+Complete static source for the ORBITAL website. No npm installation, build step, database, API key, or ChatGPT hosting dependency is required.
 
-## What it does
+## Files to edit
 
-1. **Add satellites** — by NORAD catalog ID (offline demo synthesizes a
-   plausible LEO orbit per ID) or by pasting a real TLE (parsed + validated).
-2. **Generate positions** — propagates every staged satellite over your chosen
-   duration/step, writing ECEF traces + manifest under `out/`.
-3. **Simulate** — converts the traces to CZML and animates the orbits on the
-   Cesium globe with a play/scrub timeline.
+| File | Purpose |
+| --- | --- |
+| `index.html` | Website title, navigation, mission pitch, architecture, six use cases, evaluation workflow, and footer |
+| `style.css` | Colors, typography, spacing, responsive layouts, and diagram styles |
+| `app.js` | Four scenario descriptions, scenario switching, and animated orbital visualization |
+| `.nojekyll` | Tells GitHub Pages to serve the static files without Jekyll processing |
 
-## Run
+## Deploy using the GitHub website
 
-    pip install flask
-    cd backend
-    python3 app.py
-    # open http://127.0.0.1:5000
+1. Create a repository or open the repository where you want to host this site.
+2. Extract this ZIP on your computer.
+3. Upload `index.html`, `style.css`, `app.js`, and `.nojekyll` to the repository root. You may also upload this README. Upload the extracted files, not the ZIP or its enclosing folder. Preserve unrelated files in an existing repository; check for filename conflicts before uploading.
+4. Commit the files to your publishing branch (typically `main`).
+5. Open repository **Settings → Pages**.
+6. Under **Build and deployment**, select **Deploy from a branch**.
+7. Select your publishing branch and **/ (root)**, then save.
+8. When deployment finishes, use **Visit site** on the Pages settings screen.
 
-No Cesium Ion token needed — it uses the bundled Natural Earth imagery.
+A project site normally uses `https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/`. A repository named `YOUR-USERNAME.github.io` normally uses `https://YOUR-USERNAME.github.io/`. The relative CSS and JavaScript paths support either layout.
 
-## Architecture
+GitHub Pages availability and visibility depend on your account and organization settings. This export does not carry over the private access controls of the original hosted site.
 
-    templates/index.html   entry panel + Cesium container
-    static/app.js          satellite CRUD, generate, CZML -> Cesium
-    static/style.css
-    backend/app.py         Flask API (in-memory staging, generate endpoint)
-    backend/propagate.py   position generation  (SWAP POINT — see below)
-    backend/czml.py        ECEF traces -> Cesium CZML
-    out/                   generated manifest.json + positions/*.csv
+Official instructions: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
 
-## Swapping in your real SGP4 pipeline
+## Update the content manually
 
-The demo ships a self-contained circular-orbit propagator so it runs with no
-Skyfield/network. It is NOT SGP4-accurate — orbits are visually correct but
-not precise. To use your real Stage-1 tool, replace the body of
-`propagate_positions()` in `backend/propagate.py` with a call into
-`gen_positions.py` (Skyfield SGP4 + TEME->ITRS). The GUI depends only on that
-function's contract:
+Open a file in GitHub, choose Edit, make your changes, and commit to the publishing branch. GitHub Pages republishes changes automatically; publication can take a few minutes.
 
-    propagate_positions(sats, start_utc, duration_s, step_s, out_dir) -> manifest
-        sats = [{"norad_id", "name", "l1", "l2"}, ...]
+- **Brand:** search `ORBITAL` in `index.html`. Change the browser title in `<title>` and the description in `<meta name="description">` too.
+- **Hero text:** edit the `<h1>` and paragraph with `class="lead"`.
+- **Architecture:** edit the section with `id="architecture"`.
+- **Use cases:** edit the six `<article>` elements inside `id="missions"`.
+- **Evaluation:** edit the section with `id="evaluation"`.
+- **Colors:** edit the variables at the beginning of `style.css`, such as `--bg`, `--gold`, and `--cyan`.
+- **Scenario descriptions:** edit the `scenarios` object at the beginning of `app.js`. Its keys are `nominal`, `handover`, `outage`, and `congestion`. If you change the initial nominal scenario, update the initial scenario text in `index.html` as well.
 
-and the manifest/CSV format is already identical, so `czml.py`, the API, and
-the frontend need no changes. Two more production swaps:
+Preserve element IDs and `data-scenario` attributes unless you update their corresponding JavaScript references. A code editor's Format Document command can expand the compact source for easier editing.
 
-- **Live TLE fetch**: in `app.py`, `demo_tle_for()` fabricates offline TLEs.
-  Replace the `else` branch of `add_sat()` with `gen_positions.fetch_by_ids()`
-  so a bare NORAD ID pulls the real current TLE from Celestrak.
-- **Real SGP4 accuracy note**: once using Skyfield, drop the `--max-tle-age`
-  guard's demo exemption; stale TLEs should warn as in the CLI tool.
+## Preview locally
 
-## Notes
+Open `index.html` directly in a modern browser, or serve the extracted directory with Python:
 
-- State is in-memory and single-user (a demo server). For multi-user, back
-  the staging area with a session or a small DB.
-- The generated `out/manifest.json` is directly usable by
-  `gen_topology.py --manifest out/manifest.json` and by the ns-3
-  `LeoEphemerisNodeHelper`.
-- CZML positions use `referenceFrame: FIXED` (ECEF), matching the trace
-  frame, so Cesium shows the true Earth-fixed ground track and orbital-plane
-  precession.
+```sh
+python -m http.server 8000
+```
+
+Then visit `http://localhost:8000`. Stop the server with Ctrl+C.
+
+## Dependencies and scope
+
+The fonts are requested from Google Fonts in the first line of `style.css`. If unavailable, local fallback fonts are used. Remove that import to avoid the external font request. All orbital and packet-path graphics are rendered locally using Canvas and SVG; no external image files are needed.
+
+The website presents a proposed platform. Its scenario explorer is illustrative: it does not run ns-3, Docker containers, or a live mission simulation. It contains no measured performance claims. Reduced-motion preferences and the animation pause control are supported.
+
+This package contains the website assets and deployment documentation, excluding hosting-specific configuration and Git credentials.
