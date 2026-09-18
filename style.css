@@ -10,33 +10,47 @@
 .hero-copy .lead{max-width:520px}
 
 /* THE GAP section */
-.gap-section{background:#0a1119;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.gap-intro{max-width:760px;margin-bottom:56px}
+.gap-section{background:radial-gradient(120% 80% at 50% 0%,#0e1b28,#080e19 60%);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.gap-intro{max-width:720px;margin-bottom:52px}
 .gap-intro h2{margin-bottom:22px}
 .gap-intro p{color:var(--muted);font-size:17px;line-height:1.75;margin:0}
 
-.gap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.gap-card{background:var(--bg);padding:34px 30px;display:flex;flex-direction:column;gap:0}
-.gap-solves{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:20px}
-.gap-card h3{font-size:23px;line-height:1.2;margin-bottom:16px}
-.gap-does{color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px}
-.gap-misses{font-size:15px;line-height:1.6;color:#c6b28a;margin:0;padding-top:20px;border-top:1px solid var(--line)}
-.gap-misses span{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.gap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.gap-card{position:relative;background:linear-gradient(180deg,#0f1a27,#0b131e);border:1px solid var(--line);border-radius:14px;padding:30px 28px 28px;display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s,transform .2s}
+.gap-card:hover{border-color:#3a4d5f;transform:translateY(-3px)}
+/* top accent bar per card */
+.gap-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--cyan);opacity:.8}
+.gap-card:nth-child(2)::before{background:#7aa7c8}
+.gap-card:nth-child(3)::before{background:#8ec3a0}
 
-/* PAYOFF: the platform closes what the three tools leave open */
-.gap-payoff{margin-top:1px;background:linear-gradient(120deg,#12233166,#0d1623);border:1px solid var(--line);border-top:0;padding:48px 44px;display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:baseline}
-.gap-payoff-lead{font-family:'Space Grotesk',sans-serif;font-size:30px;line-height:1.1;color:var(--gold);margin:0;white-space:nowrap}
-.gap-payoff-body{color:var(--text);font-size:18px;line-height:1.7;margin:0;max-width:620px}
+.gap-solves{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--cyan);margin-bottom:18px;font-weight:600}
+.gap-solves::before{content:"";width:14px;height:1px;background:currentColor}
+.gap-card h3{font-size:22px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+.gap-does{color:#c2cdda;font-size:15px;line-height:1.6;margin:0 0 24px;flex:1}
+
+/* "blind to" as the visual punch of each card */
+.gap-misses{position:relative;font-size:14.5px;line-height:1.55;color:#e0c088;margin:0;padding:16px 0 0;border-top:1px dashed #3a3524}
+.gap-misses span{display:flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);margin-bottom:9px;font-weight:600}
+/* "no entry" glyph as an inline SVG background — crisp and self-centering */
+.gap-misses span::before{content:"";width:13px;height:13px;flex:none;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23eeb865' stroke-width='2.4'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cline x1='5.6' y1='5.6' x2='18.4' y2='18.4'/%3E%3C/svg%3E")}
+
+/* PAYOFF: the resolution — arrow from three into one */
+.gap-payoff{margin-top:20px;position:relative;background:linear-gradient(120deg,#16303f,#0e1c28);border:1px solid #2b4a5a;border-radius:14px;padding:44px;display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;overflow:hidden}
+.gap-payoff::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 0% 50%,#eeb86518,transparent 70%);pointer-events:none}
+.gap-payoff-lead{position:relative;font-family:'Space Grotesk',sans-serif;font-size:32px;line-height:1.05;color:var(--gold);margin:0;white-space:nowrap;font-weight:600}
+.gap-payoff-body{position:relative;color:var(--text);font-size:18px;line-height:1.7;margin:0;max-width:640px}
 
 @media(max-width:1050px){
-  .gap-payoff{grid-template-columns:1fr;gap:20px;padding:36px 28px}
+  .gap-grid{gap:14px}
+  .gap-payoff{grid-template-columns:1fr;gap:18px;padding:34px 28px}
   .gap-payoff-lead{white-space:normal}
 }
 @media(max-width:760px){
-  .gap-grid{grid-template-columns:1fr}
+  .gap-grid{grid-template-columns:1fr;gap:14px}
   .gap-intro{margin-bottom:36px}
   .gap-intro p{font-size:16px}
-  .gap-payoff-lead{font-size:26px}
+  .gap-card{padding:26px 24px 24px}
+  .gap-payoff-lead{font-size:27px}
   .gap-payoff-body{font-size:16px}
 }
 
