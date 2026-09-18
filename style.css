@@ -58,7 +58,6 @@
 .contact-info{margin-bottom:1.5rem}
 
 /* Walkthrough inset inside the live orbital view */
-.walkthrough-preview{position:absolute;right:20px;bottom:48px;width:min(230px,38%);margin:0;padding:7px;background:#08111be8;border:1px solid #40515e;box-shadow:0 12px 30px #0008;z-index:2}
-.walkthrough-preview figcaption{margin:0 0 6px;color:var(--gold);font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
-.walkthrough-preview img{display:block;width:100%;height:auto;aspect-ratio:1280 / 820;object-fit:cover;border:1px solid #263a49}
-@media(max-width:460px){.walkthrough-preview{right:0;bottom:48px;width:185px}}
+.walkthrough-view{position:relative;width:100%;margin:0;padding:12px;background:#08111be8;border:1px solid #40515e;box-shadow:0 12px 30px #0008}
+.walkthrough-view figcaption{margin:0 0 10px;color:var(--gold);font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
+.walkthrough-view img{display:block;width:100%;height:auto;aspect-ratio:1280 / 820;object-fit:cover;border:1px solid #263a49}
